@@ -9,7 +9,7 @@ on:
 jobs:
   backend-tests:
     runs-on: ubuntu-latest
-    
+
     env:
       APP_ENV: test
       APP_DEBUG: 0
@@ -160,11 +160,11 @@ jobs:
             "git config --global --add safe.directory /var/www/html && \
              chown -R www-data:www-data /var/www/html"
 
-      - name: Install PHP deps inside container (as www-data)
-        run: docker compose exec -T -u www-data php composer install --no-progress --prefer-dist --no-interaction
+      - name: Install PHP deps inside container
+        run: docker compose exec -T -u "$(id -u):$(id -g)" php composer install --no-progress --prefer-dist
 
       - name: Run migrations inside container
-        run: docker compose exec -T -u www-data php php bin/console doctrine:migrations:migrate -n
+        run: docker compose exec -T -u "$(id -u):$(id -g)" php php bin/console doctrine:migrations:migrate -n
 
       - name: Wait for web (8080)
         run: |
@@ -173,11 +173,14 @@ jobs:
             if [ "$code" -ge 200 ] && [ "$code" -lt 500 ]; then
               echo "Web is up with HTTP $code"; exit 0
             fi
-            echo "Waiting web... ($i) - got $code"
+            echo "Waiting web... ($i) last=$code"
             sleep 3
           done
           docker compose logs web || true
           exit 1
+
+      - name: Fix workspace permissions for ZAP reports
+        run: sudo chown -R "$USER:$USER" "$GITHUB_WORKSPACE"
 
       - name: ZAP Full Scan
         uses: zaproxy/action-full-scan@v0.7.0
