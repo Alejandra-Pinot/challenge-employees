@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Doctrine;
@@ -13,8 +14,10 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class DoctrineEmployeeRepository implements EmployeeRepository
 {
-    public function __construct(private EntityManagerInterface $em) {}
-    
+    public function __construct(private EntityManagerInterface $em)
+    {
+    }
+
     public function add(Employee $employee): void
     {
         $rec = $this->toRecord($employee, new EmployeeRecord());
@@ -66,7 +69,7 @@ final class DoctrineEmployeeRepository implements EmployeeRepository
         /** @var EmployeeRecord[] $rows */
         $rows = $qb->getQuery()->getResult();
 
-        $items = array_map(fn(EmployeeRecord $r) => $this->toDomain($r), $rows);
+        $items = array_map(fn (EmployeeRecord $r) => $this->toDomain($r), $rows);
         $count = (int) $this->em->createQueryBuilder()
             ->select('COUNT(e.id)')
             ->from(EmployeeRecord::class, 'e')

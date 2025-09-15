@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Employee\Handler;
@@ -8,7 +9,9 @@ use App\Domain\Employee\EmployeeRepository;
 
 final class GetEmployeeByIdHandler
 {
-    public function __construct(private EmployeeRepository $repo) {}
+    public function __construct(private EmployeeRepository $repo)
+    {
+    }
 
     /**
      * @return array<string,mixed>
@@ -19,7 +22,7 @@ final class GetEmployeeByIdHandler
         if (!$e) {
             throw new \DomainException('Employee not found');
         }
-        
+
         return [
             'id'         => $e->id()->value(),
             'name'       => $e->name()->value(),

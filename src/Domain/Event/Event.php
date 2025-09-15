@@ -7,7 +7,6 @@ namespace App\Domain\Event;
 use App\Domain\Event\Exception\EventFullException;
 use App\Domain\Event\Exception\EventNotPublishedException;
 use App\Domain\Shared\AggregateRoot;
-use App\Domain\Shared\DomainEvent;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -213,4 +212,4 @@ class Event extends AggregateRoot
     {
         return $this->capacity->value() - $this->attendees->count();
     }
-} 
+}

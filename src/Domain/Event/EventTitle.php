@@ -18,4 +18,4 @@ class EventTitle extends StringValueObject
             throw new \InvalidArgumentException('Event title cannot be longer than 255 characters');
         }
     }
-} 
+}

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Api\Controller;
@@ -27,7 +28,8 @@ final class EmployeeController
         private GetEmployeeByIdHandler $getHandler,
         private ListEmployeesHandler $listHandler,
         private ValidatorInterface $validator
-    ) {}
+    ) {
+    }
 
     #[Route('/api/employees', name: 'create_employee', methods: ['POST'])]
     public function create(Request $req): JsonResponse

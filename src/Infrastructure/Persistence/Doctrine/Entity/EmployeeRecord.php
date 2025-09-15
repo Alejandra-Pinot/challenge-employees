@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Doctrine\Entity;
@@ -38,30 +39,84 @@ class EmployeeRecord
     private \DateTimeImmutable $updatedAt;
 
 
-    public function getId(): string { return $this->id; }
-    public function setId(string $id): void { $this->id = $id; }
+    public function getId(): string
+    {
+        return $this->id;
+    }
+    public function setId(string $id): void
+    {
+        $this->id = $id;
+    }
 
-    public function getName(): string { return $this->name; }
-    public function setName(string $name): void { $this->name = $name; }
+    public function getName(): string
+    {
+        return $this->name;
+    }
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
 
-    public function getEmail(): string { return $this->email; }
-    public function setEmail(string $email): void { $this->email = $email; }
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
 
-    public function getDepartment(): string { return $this->department; }
-    public function setDepartment(string $department): void { $this->department = $department; }
+    public function getDepartment(): string
+    {
+        return $this->department;
+    }
+    public function setDepartment(string $department): void
+    {
+        $this->department = $department;
+    }
 
-    public function getRole(): string { return $this->role; }
-    public function setRole(string $role): void { $this->role = $role; }
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+    public function setRole(string $role): void
+    {
+        $this->role = $role;
+    }
 
-    public function getStatus(): string { return $this->status; }
-    public function setStatus(string $status): void { $this->status = $status; }
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+    public function setStatus(string $status): void
+    {
+        $this->status = $status;
+    }
 
-    public function getHiredAt(): \DateTimeImmutable { return $this->hiredAt; }
-    public function setHiredAt(\DateTimeImmutable $hiredAt): void { $this->hiredAt = $hiredAt; }
+    public function getHiredAt(): \DateTimeImmutable
+    {
+        return $this->hiredAt;
+    }
+    public function setHiredAt(\DateTimeImmutable $hiredAt): void
+    {
+        $this->hiredAt = $hiredAt;
+    }
 
-    public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
-    public function setCreatedAt(\DateTimeImmutable $createdAt): void { $this->createdAt = $createdAt; }
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+    public function setCreatedAt(\DateTimeImmutable $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
 
-    public function getUpdatedAt(): \DateTimeImmutable { return $this->updatedAt; }
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): void { $this->updatedAt = $updatedAt; }
+    public function getUpdatedAt(): \DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+    }
 }

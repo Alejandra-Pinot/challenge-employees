@@ -1,12 +1,13 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Domain\Employee;
 
-use App\Domain\Shared\AggregateRoot;
-use App\Domain\Shared\ValueObject\EmployeeId;
 use App\Domain\Employee\Event\EmployeeHired;
 use App\Domain\Employee\Event\EmployeeStatusChanged;
+use App\Domain\Shared\AggregateRoot;
+use App\Domain\Shared\ValueObject\EmployeeId;
 
 final class Employee extends AggregateRoot
 {
@@ -107,13 +108,40 @@ final class Employee extends AggregateRoot
         );
     }
 
-    public function id(): EmployeeId { return $this->id; }
-    public function name(): EmployeeName { return $this->name; }
-    public function email(): string { return $this->email; }
-    public function department(): string { return $this->department; }
-    public function role(): string { return $this->role; }
-    public function status(): EmployeeStatus { return $this->status; }
-    public function hiredAt(): \DateTimeImmutable { return $this->hiredAt; }
-    public function createdAt(): \DateTimeImmutable { return $this->createdAt; }
-    public function updatedAt(): \DateTimeImmutable { return $this->updatedAt; }
+    public function id(): EmployeeId
+    {
+        return $this->id;
+    }
+    public function name(): EmployeeName
+    {
+        return $this->name;
+    }
+    public function email(): string
+    {
+        return $this->email;
+    }
+    public function department(): string
+    {
+        return $this->department;
+    }
+    public function role(): string
+    {
+        return $this->role;
+    }
+    public function status(): EmployeeStatus
+    {
+        return $this->status;
+    }
+    public function hiredAt(): \DateTimeImmutable
+    {
+        return $this->hiredAt;
+    }
+    public function createdAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+    public function updatedAt(): \DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
 }

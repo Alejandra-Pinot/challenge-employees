@@ -30,4 +30,4 @@ abstract class StringValueObject
     }
 
     abstract protected function ensureIsValid(string $value): void;
-} 
+}

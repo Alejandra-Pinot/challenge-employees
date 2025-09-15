@@ -42,4 +42,4 @@ abstract class Uuid
             throw new \InvalidArgumentException(sprintf('<%s> does not allow the invalid uuid <%s>.', static::class, $value));
         }
     }
-} 
+}

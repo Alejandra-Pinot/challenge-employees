@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Employee\Handler;
@@ -8,7 +9,9 @@ use App\Domain\Employee\EmployeeRepository;
 
 final class ChangeEmployeeStatusHandler
 {
-    public function __construct(private EmployeeRepository $repo) {}
+    public function __construct(private EmployeeRepository $repo)
+    {
+    }
 
     public function __invoke(ChangeEmployeeStatusCommand $cmd): void
     {

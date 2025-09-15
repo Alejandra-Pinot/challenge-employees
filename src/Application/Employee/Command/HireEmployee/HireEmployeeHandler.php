@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Employee\Command\HireEmployee;
@@ -9,8 +10,10 @@ use App\Domain\Employee\EmployeeRepository;
 
 final class HireEmployeeHandler
 {
-    public function __construct(private readonly EmployeeRepository $repo) {}
-    
+    public function __construct(private readonly EmployeeRepository $repo)
+    {
+    }
+
     public function __invoke(HireEmployeeCommand $cmd): string
     {
         $name = EmployeeName::fromString($cmd->name);

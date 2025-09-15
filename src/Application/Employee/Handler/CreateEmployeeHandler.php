@@ -1,17 +1,20 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Application\Employee\Handler;
 
 use App\Application\Employee\Command\CreateEmployeeCommand;
 use App\Domain\Employee\Employee;
-use App\Domain\Employee\EmployeeRepository;
 use App\Domain\Employee\EmployeeName;
+use App\Domain\Employee\EmployeeRepository;
 use App\Domain\Shared\ValueObject\Email;
 
 final class CreateEmployeeHandler
 {
-    public function __construct(private EmployeeRepository $repo) {}
+    public function __construct(private EmployeeRepository $repo)
+    {
+    }
 
     public function __invoke(CreateEmployeeCommand $cmd): string
     {
