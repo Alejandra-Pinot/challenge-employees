@@ -81,35 +81,46 @@ jobs:
       #     name: backend-coverage
 
   frontend-tests:
-    if: ${{ hashFiles('**/package-lock.json', '**/yarn.lock', '**/npm-shrinkwrap.json') != '' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
+      - name: Detect Node lockfiles
+        id: detect_lock
+        run: |
+          if [ -f package-lock.json ] || [ -f yarn.lock ] || [ -f npm-shrinkwrap.json ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup Node.js
+        if: steps.detect_lock.outputs.present == 'true'
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'npm'
 
       - name: Install dependencies
+        if: steps.detect_lock.outputs.present == 'true'
         run: npm ci
 
       - name: Run ESLint
+        if: steps.detect_lock.outputs.present == 'true'
         run: npm run lint
 
       - name: Run Prettier check
+        if: steps.detect_lock.outputs.present == 'true'
         run: npx prettier --check "src/**/*.{js,vue,ts,jsx,tsx}"
 
       - name: Run tests
+        if: steps.detect_lock.outputs.present == 'true'
         run: npm run test:coverage
 
-      # - name: Upload coverage to Codecov
-      #   uses: codecov/codecov-action@v3
-      #   with:
-      #     file: ./coverage/lcov.info
-      #     flags: frontend
-      #     name: frontend-coverage
+      - name: Skip (no frontend lockfiles found)
+        if: steps.detect_lock.outputs.present != 'true'
+        run: echo "No Node lockfile detected; skipping frontend job."
+
 
   # code-quality:
   #   runs-on: ubuntu-latest
