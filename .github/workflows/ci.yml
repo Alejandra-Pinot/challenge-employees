@@ -53,7 +53,7 @@ jobs:
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-
-
+            
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
@@ -154,17 +154,18 @@ jobs:
           docker compose up -d --build
           docker compose ps
 
-      - name: Fix git safe.directory & permissions (container)
+      - name: Fix ownership & git safe.directory (container)
         run: |
-          docker compose exec -T -u root php sh -lc \
-            "git config --global --add safe.directory /var/www/html && \
-             chown -R www-data:www-data /var/www/html"
+          # Deja el workspace a nombre de www-data (propietario de la app en la imagen)
+          docker compose exec -T -u root php sh -lc "chown -R www-data:www-data /var/www/html"
+          # Configura safe.directory para el usuario que SÍ usaremos (www-data)
+          docker compose exec -T -u www-data php git config --global --add safe.directory /var/www/html
 
-      - name: Install PHP deps inside container
-        run: docker compose exec -T -u "$(id -u):$(id -g)" php composer install --no-progress --prefer-dist
+      - name: Install PHP deps inside container (as www-data)
+        run: docker compose exec -T -u www-data php composer install --no-progress --prefer-dist
 
-      - name: Run migrations inside container
-        run: docker compose exec -T -u "$(id -u):$(id -g)" php php bin/console doctrine:migrations:migrate -n
+      - name: Run migrations inside container (as www-data)
+        run: docker compose exec -T -u www-data php php bin/console doctrine:migrations:migrate -n
 
       - name: Wait for web (8080)
         run: |
