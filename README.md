@@ -1,137 +1,52 @@
-# 🏗️ Boilerplate - Sistema de RRHH
+# Proyecto Symfony + Docker
 
-## 📋 Descripción
+Aplicación Symfony (PHP 8.2) con entorno reproducible en Docker (php-fpm, nginx y MySQL) y pipeline CI/CD en GitHub Actions.
 
-Boilerplate inicial para el desarrollo del Sistema de Gestión de RRHH con Event-Driven Architecture, DDD y CQRS.
+## Stack
+- **Symfony** 6/7/8 (código compatible con **PHP 8.2** dentro de contenedor)
+- **Docker Compose**: servicios `php`, `web` (nginx) y `mysql`
+- **MySQL** 8.x (modo desarrollo y CI)
+- Herramientas de calidad:
+  - **PHPUnit** (tests)
+  - **PHPStan** (análisis estático)
+  - **PHP-CS-Fixer** (estilo)
+- Seguridad: **OWASP ZAP** (Baseline recomendado para PR)
 
-## 🚀 Instalación Rápida
+## Requisitos
+- Docker Desktop / Engine + Docker Compose
 
-### Prerrequisitos
-- PHP 8.2+
-- Composer
-- Node.js 18+
-- Docker y Docker Compose
-
-### Configuración
-
+## Inicio rápido
 ```bash
-# 1. Clonar y configurar
-git clone <repository-url>
-cd hrm-system
+# 1) Clonar
+git clone <repo-privado>.git
+cd challenge-employees
 
-# 2. Instalar dependencias
-composer install
-npm install
+# 2) Copiar variables
+cp .env.example .env
 
-# 3. Configurar entorno
-cp env.example .env
-# Editar .env con configuración de BD
+# 3) Levantar contenedores
+docker compose up -d
+docker compose ps
 
-# 4. Iniciar servicios
-docker-compose up -d
+# 4) Instalar deps PHP
+docker compose exec php composer install --no-progress --prefer-dist
 
-# 5. Configurar base de datos
-php bin/console doctrine:migrations:migrate
-php bin/console doctrine:fixtures:load
+# 5) Migraciones
+docker compose exec php php bin/console doctrine:migrations:migrate -n
 
-# 6. Iniciar desarrollo
-symfony server:start
-npm run dev
+
+# 6) Correr el paquete de calidad y pruebas
+docker compose exec php composer stan
+docker compose exec php ./vendor/bin/php-cs-fixer fix --dry-run --diff
+docker compose exec php composer test
 ```
 
-## 📁 Estructura del Proyecto
+## Probar en el navegador
+- Abrir en el navegador http://localhost:8080/index.htm
 
-```
-src/
-├── Domain/                    # Domain Layer (DDD)
-│   ├── Employee/             # Employee Bounded Context
-│   ├── Payroll/              # Payroll Bounded Context
-│   ├── Vacation/             # Vacation Bounded Context
-│   └── Shared/               # Shared Kernel
-├── Application/              # Application Layer
-│   ├── Command/              # Command Handlers (CQRS)
-│   ├── Query/                # Query Handlers (CQRS)
-│   └── Event/                # Event Handlers
-├── Infrastructure/           # Infrastructure Layer
-│   ├── Persistence/          # Repositories
-│   ├── Messaging/            # Event Bus
-│   └── External/             # External Services
-└── UI/                       # User Interface Layer
-    ├── API/                  # REST Controllers
-    └── Web/                  # Web Controllers
-
-assets/                       # Frontend (Vue.js)
-├── components/               # Vue Components
-├── stores/                   # Pinia Stores
-├── services/                 # API Services
-└── views/                    # Vue Views
-```
-
-## 🔧 Herramientas de Desarrollo
-
-### Backend
-```bash
-# Análisis estático
-composer stan
-
-# Estilo de código
-composer cs:check
-composer cs:fix
-
-# Tests
-composer test
-composer test:coverage
-```
-
-### Frontend
-```bash
-# Análisis de código
-npm run lint
-
-# Formateo
-npm run format
-
-# Tests
-npm run test
-npm run test:coverage
-```
-
-## 📊 Servicios Disponibles
-
-| Servicio | Puerto | Descripción |
-|----------|--------|-------------|
-| Symfony | 8000 | Backend API |
-| Vue.js | 3000 | Frontend |
-| MySQL | 3306 | Base de datos |
-| PostgreSQL | 5432 | Base de datos (alternativa) |
-| Redis | 6379 | Caché y sesiones |
-| RabbitMQ | 5672 | Mensajería (Event-Driven) |
-| MailHog | 8025 | Testing de emails |
-| Elasticsearch | 9200 | Event Store |
-
-## 🎯 Próximos Pasos
-
-1. **Implementar Domain Entities** en `src/Domain/`
-2. **Crear Value Objects** para validaciones
-3. **Implementar Domain Events** para cambios de estado
-4. **Configurar CQRS** con Command/Query Handlers
-5. **Desarrollar APIs REST** en `src/UI/API/`
-6. **Crear componentes Vue.js** en `assets/components/`
-7. **Implementar tests** en `tests/`
-
-## 📚 Recursos
-
-- [Symfony Documentation](https://symfony.com/doc/current/)
-- [Vue.js 3 Guide](https://vuejs.org/guide/)
-- [Domain-Driven Design](https://martinfowler.com/bliki/DomainDrivenDesign.html)
-- [Event-Driven Architecture](https://martinfowler.com/articles/201701-event-driven.html)
-- [CQRS Pattern](https://martinfowler.com/bliki/CQRS.html)
-
-## 🆘 Soporte
-
-Para dudas durante el desarrollo, consultar:
-- Documentación oficial de las tecnologías
-- Stack Overflow para problemas específicos
-- GitHub para ejemplos de código
-
-**¡Comienza a desarrollar! 🚀** 
+## Colección de Postman
+- Hay una colección para probar los endpoints desde Postman:
+  - Archivo: employees.postman_collection.json
+- Importar en Postman:
+  - Abrir Postman → Import
+  - Upload Files y seleccionar docs/postman/collection.json
