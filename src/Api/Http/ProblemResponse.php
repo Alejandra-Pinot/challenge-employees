@@ -7,6 +7,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 final class ProblemResponse
 {
+    /**
+     * @param array<string, array<int, string>> $errors
+    */
     public static function validation(array $errors, int $status = 422): JsonResponse
     {
         return new JsonResponse([
