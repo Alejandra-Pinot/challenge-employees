@@ -2,10 +2,11 @@
 declare(strict_types=1);
 
 namespace App\Domain\Employee;
+
+use App\Domain\Shared\AggregateRoot;
 use App\Domain\Shared\ValueObject\EmployeeId;
 use App\Domain\Employee\Event\EmployeeHired;
 use App\Domain\Employee\Event\EmployeeStatusChanged;
-use App\Domain\Shared\AggregateRoot;
 
 final class Employee extends AggregateRoot
 {
@@ -26,6 +27,8 @@ final class Employee extends AggregateRoot
         string $department,
         string $role
     ) {
+        parent::__construct();
+
         $now = new \DateTimeImmutable();
 
         $this->id = $id;
@@ -53,7 +56,7 @@ final class Employee extends AggregateRoot
             $department,
             $role
         );
-        
+
         $employee->recordDomainEvent(
             new EmployeeHired(
                 $employee->id,

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Domain\Shared;
@@ -9,27 +8,46 @@ use Doctrine\Common\Collections\Collection;
 
 abstract class AggregateRoot
 {
-    private ?Collection $domainEvents = null;
+    /** @var Collection<int, DomainEvent> */
+    private Collection $domainEvents;
 
-    private function events(): Collection
+    protected function __construct()
     {
-        return $this->domainEvents ??= new ArrayCollection();
+        /** @var Collection<int, DomainEvent> $events */
+        $events = new ArrayCollection();
+        $this->domainEvents = $events;
     }
 
     protected function recordDomainEvent(DomainEvent $domainEvent): void
     {
-        $this->events()->add($domainEvent);
+        $this->domainEvents->add($domainEvent);
     }
 
+    /**
+     * @return Collection<int, DomainEvent>
+    */
+    public function events(): Collection
+    {
+        return $this->domainEvents;
+    }
+
+    /**
+     * @return list<DomainEvent>
+    */
     public function pullDomainEvents(): array
     {
-        $events = $this->events()->toArray();
-        $this->events()->clear();
-        return $events;
+        /** @var list<DomainEvent> $export */
+        $export = array_values($this->domainEvents->toArray());
+        $this->domainEvents->clear();
+
+        return $export;
     }
 
+    /**
+     * @return Collection<int, DomainEvent>
+     */
     public function getDomainEvents(): Collection
     {
-        return $this->events();
+        return $this->domainEvents;
     }
 }

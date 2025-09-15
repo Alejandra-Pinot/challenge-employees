@@ -5,15 +5,8 @@ parameters:
     - tests
 
   excludePaths:
-  - src/Kernel.php
-  - src/DataFixtures
-  - src/Domain/Event
+    - src/Kernel.php
+    - src/DataFixtures
+    - src/Domain/Event/**
 
-  checkMissingIterableValueType: true
-  checkGenericClassInNonGenericObjectType: true
-  checkMissingCallableSignature: true
-
-  ignoreErrors:
-    - "#Call to an undefined method [A-Za-z0-9_\\\\]+::recordDomainEvent\\(\\)#"
-    - "#Call to an undefined method [A-Za-z0-9_\\\\]+::pullDomainEvents\\(\\)#"
-    - "#Call to an undefined method [A-Za-z0-9_\\\\]+::getDomainEvents\\(\\)#"
+  reportUnmatchedIgnoredErrors: false

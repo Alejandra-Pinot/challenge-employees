@@ -100,8 +100,8 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "test": "phpunit",
-        "test:coverage": "phpunit --coverage-html coverage",
+        "test": "vendor/bin/phpunit --colors=always",
+        "test:coverage": "vendor/bin/phpunit --coverage-clover=coverage.xml",
         "cs:check": "php-cs-fixer fix --dry-run --diff",
         "cs:fix": "php-cs-fixer fix",
         "stan": "phpstan analyse"
