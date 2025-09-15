@@ -1,0 +1,70 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# PHP Code Quality Checks
+echo "🔍 Running PHP code quality checks..."
+
+# PHP CS Fixer check
+if [ -f "vendor/bin/php-cs-fixer" ]; then
+    echo "  - PHP CS Fixer..."
+    vendor/bin/php-cs-fixer fix --dry-run --diff
+    if [ $? -ne 0 ]; then
+        echo "❌ PHP CS Fixer found issues. Run 'composer cs:fix' to fix them."
+        exit 1
+    fi
+fi
+
+# PHPStan analysis
+if [ -f "vendor/bin/phpstan" ]; then
+    echo "  - PHPStan analysis..."
+    vendor/bin/phpstan analyse
+    if [ $? -ne 0 ]; then
+        echo "❌ PHPStan found issues."
+        exit 1
+    fi
+fi
+
+# PHPUnit tests
+if [ -f "vendor/bin/phpunit" ]; then
+    echo "  - PHPUnit tests..."
+    vendor/bin/phpunit --stop-on-failure
+    if [ $? -ne 0 ]; then
+        echo "❌ PHPUnit tests failed."
+        exit 1
+    fi
+fi
+
+# Frontend Code Quality Checks
+echo "🔍 Running frontend code quality checks..."
+
+# ESLint check
+if [ -f "node_modules/.bin/eslint" ]; then
+    echo "  - ESLint..."
+    npm run lint
+    if [ $? -ne 0 ]; then
+        echo "❌ ESLint found issues."
+        exit 1
+    fi
+fi
+
+# Prettier check
+if [ -f "node_modules/.bin/prettier" ]; then
+    echo "  - Prettier..."
+    npx prettier --check "src/**/*.{js,vue,ts,jsx,tsx}"
+    if [ $? -ne 0 ]; then
+        echo "❌ Prettier found formatting issues. Run 'npm run format' to fix them."
+        exit 1
+    fi
+fi
+
+# Frontend tests
+if [ -f "node_modules/.bin/vitest" ]; then
+    echo "  - Frontend tests..."
+    npm run test
+    if [ $? -ne 0 ]; then
+        echo "❌ Frontend tests failed."
+        exit 1
+    fi
+fi
+
+echo "✅ All code quality checks passed!" 

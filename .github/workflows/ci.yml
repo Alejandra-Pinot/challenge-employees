@@ -1,0 +1,153 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: hrm_system_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: mbstring, intl, pdo_mysql
+        coverage: xdebug
+    
+    - name: Validate composer.json
+      run: composer validate --strict
+    
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+    
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+    
+    - name: Run PHPStan
+      run: composer stan
+    
+    - name: Run PHP CS Fixer
+      run: composer cs:check
+    
+    - name: Run PHPUnit tests
+      run: composer test:coverage
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: backend
+        name: backend-coverage
+
+  frontend-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run ESLint
+      run: npm run lint
+    
+    - name: Run Prettier check
+      run: npx prettier --check "src/**/*.{js,vue,ts,jsx,tsx}"
+    
+    - name: Run tests
+      run: npm run test:coverage
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+        flags: frontend
+        name: frontend-coverage
+
+  code-quality:
+    runs-on: ubuntu-latest
+    needs: [backend-tests, frontend-tests]
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        args: >
+          -Dsonar.projectKey=hrm-system
+          -Dsonar.organization=your-org
+          -Dsonar.sources=src
+          -Dsonar.tests=tests
+          -Dsonar.php.coverage.reportPaths=coverage.xml
+          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+          -Dsonar.coverage.exclusions=**/*Test.php,**/*Spec.php,**/*.test.js,**/*.spec.js
+          -Dsonar.test.inclusions=**/*Test.php,**/*Spec.php,**/*.test.js,**/*.spec.js
+
+  security-scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Run OWASP ZAP Scan
+      uses: zaproxy/action-full-scan@v0.7.0
+      with:
+        target: 'http://localhost:8000'
+    
+    - name: Run Dependency Check
+      uses: dependency-check/Dependency-Check_Action@main
+      with:
+        project: 'HRM System'
+        path: '.'
+        format: 'HTML'
+        out: 'reports'
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [backend-tests, frontend-tests, code-quality, security-scan]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Deploy to staging
+      run: |
+        echo "Deploying to staging environment..."
+        # Add your deployment commands here
+    
+    - name: Notify deployment
+      run: |
+        echo "Deployment completed successfully!"
+        # Add notification commands here 

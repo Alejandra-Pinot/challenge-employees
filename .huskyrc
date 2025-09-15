@@ -1,0 +1,5 @@
+{
+  "hooks": {
+    "pre-commit": "husky run .husky/pre-commit"
+  }
+} 

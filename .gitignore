@@ -1,0 +1,30 @@
+# Dependencias / builds / caches
+/vendor/
+var/
+/node_modules/
+/public/build/
+/.phpunit.cache/
+/coverage/
+
+# Entorno
+.env
+.env.local
+.env.*.local
+!/.env.example
+
+# IDE / SO
+.idea/
+.vscode/
+.DS_Store
+
+# PHPUnit
+/phpunit.xml
+
+# Lexik JWT
+/config/jwt/*.pem
+
+# (Opcional) PHP-CS-Fixer cache
+/.php-cs-fixer.cache
+
+# (Opcional) NO ignores phpstan config si la quieres versionar
+# phpstan.neon

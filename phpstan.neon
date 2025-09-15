@@ -1,0 +1,29 @@
+parameters:
+    level: 8
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - src/Kernel.php
+        - src/DataFixtures
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    
+    # Event-Driven Architecture specific rules
+    ignoreErrors:
+        - '#Call to an undefined method [a-zA-Z0-9\\_]+::recordDomainEvent\(\)#'
+        - '#Call to an undefined method [a-zA-Z0-9\\_]+::pullDomainEvents\(\)#'
+        - '#Call to an undefined method [a-zA-Z0-9\\_]+::getDomainEvents\(\)#'
+    
+    # Domain Events validation
+    checkMissingCallableSignature: true
+    checkMissingIterableValueType: true
+    
+    # CQRS validation
+    checkGenericClassInNonGenericObjectType: true
+    
+    # Repository pattern validation
+    checkMissingIterableValueType: true
+    
+    # Value Objects validation
+    checkMissingCallableSignature: true 

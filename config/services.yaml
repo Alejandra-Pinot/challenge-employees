@@ -1,0 +1,20 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        public: false
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Infrastructure/Persistence/Doctrine/Entity/'
+    
+    App\Api\Controller\:
+        resource: '../src/Api/Controller/'
+        tags: ['controller.service_arguments']
+        public: true
+
+    App\Domain\Employee\EmployeeRepository: '@App\Infrastructure\Persistence\Doctrine\DoctrineEmployeeRepository'

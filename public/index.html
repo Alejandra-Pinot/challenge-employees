@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Challenge - HRM System</title>
+  <link rel="stylesheet" href="/assets/css/index.css?v=1">
+</head>
+<body>
+  <h1>Empleados</h1>
+
+  <div class="grid">
+    <!-- Crear empleado -->
+    <div class="card">
+      <h2>Crear empleado</h2>
+      <label>Nombre</label>
+      <input id="c_name" placeholder="Mayra Pinot" />
+      <label>Email</label>
+      <input id="c_email" type="email" placeholder="mayra@example.com" />
+      <label>Departamento</label>
+      <input id="c_department" placeholder="IT" />
+      <label>Rol</label>
+      <input id="c_role" placeholder="Developer" />
+      <div class="row">
+        <button id="btnCreate">Crear</button>
+        <span id="c_status" class="muted"></span>
+      </div>
+      <div style="margin-top:10px;"><pre id="c_out">{}</pre></div>
+    </div>
+
+    <!-- Cambiar estado -->
+    <div class="card">
+      <h2>Cambiar estado</h2>
+      <label>ID de empleado (UUID)</label>
+      <input id="u_id" placeholder="<uuid>" />
+      <label>Nuevo estado</label>
+      <select id="u_status">
+        <option value="active">Activo</option>
+        <option value="inactive">Inactivo</option>
+        <option value="vacation">Vacaciones</option>
+        <option value="terminated">Terminado</option>
+      </select>
+      <div class="row">
+        <button id="btnUpdate">Actualizar estado</button>
+        <span id="u_statusLbl" class="muted"></span>
+      </div>
+      <div style="margin-top:10px;"><pre id="u_out">{}</pre></div>
+    </div>
+
+    <!-- Listado -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <h2>Listado de empleados</h2>
+      <div class="row">
+        <label style="margin:0;">Página</label>
+        <input id="l_page" type="number" min="1" value="1" style="width:90px;" />
+        <label style="margin:0;">Límite</label>
+        <input id="l_limit" type="number" min="1" max="100" value="10" style="width:90px;" />
+        <button id="btnLoad">Cargar</button>
+        <span id="l_info" class="muted"></span>
+        <div style="margin-left:auto; display:flex; gap:8px;">
+          <button id="btnPrev">◀</button>
+          <button id="btnNext">▶</button>
+        </div>
+      </div>
+      <div style="margin-top:12px; overflow:auto;">
+        <table id="tbl">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Depto</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Reto • UI mínima para probar API</div>
+
+  <script src="/assets/js/index.js?v=1"></script>
+</body>
+</html>
