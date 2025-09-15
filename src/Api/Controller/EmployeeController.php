@@ -41,11 +41,12 @@ final class EmployeeController
         $dto = CreateEmployeeRequest::fromArray($data);
         $violations = $this->validator->validate($dto);
         if (\count($violations) > 0) {
-            $errors = [];
+            $normalized = [];
             foreach ($violations as $v) {
-                $errors[] = ['field' => $v->getPropertyPath(), 'message' => $v->getMessage()];
+                $field = $v->getPropertyPath() ?: '_root';
+                $normalized[$field][] = (string) $v->getMessage();
             }
-            return ProblemResponse::validation($errors); // 422
+            return ProblemResponse::validation($normalized); // 422
         }
 
         $cmd = new CreateEmployeeCommand($dto->name, $dto->email, $dto->department, $dto->role);
