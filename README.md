@@ -42,7 +42,7 @@ docker compose exec php composer test
 ```
 
 ## Probar en el navegador
-- Abrir en el navegador http://localhost:8080/index.htm
+- Abrir en el navegador http://localhost:8080/index.html
 
 ## Colección de Postman
 - Hay una colección para probar los endpoints desde Postman:
