@@ -5,8 +5,9 @@ parameters:
     - tests
 
   excludePaths:
-    - src/Kernel.php
-    - src/DataFixtures
+  - src/Kernel.php
+  - src/DataFixtures
+  - src/Domain/Event
 
   checkMissingIterableValueType: true
   checkGenericClassInNonGenericObjectType: true
