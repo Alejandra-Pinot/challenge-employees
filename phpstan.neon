@@ -12,7 +12,7 @@ parameters:
   checkGenericClassInNonGenericObjectType: true
   checkMissingCallableSignature: true
 
-  # Reglas de DDD/CQRS que suelen “falsear” en PHPStan
   ignoreErrors:
-    - '#Call to an undefined method [A-Za-z0-9_\\]+::recordDomainEvent\(\)#'
-    - '#C
+    - "#Call to an undefined method [A-Za-z0-9_\\\\]+::recordDomainEvent\\(\\)#"
+    - "#Call to an undefined method [A-Za-z0-9_\\\\]+::pullDomainEvents\\(\\)#"
+    - "#Call to an undefined method [A-Za-z0-9_\\\\]+::getDomainEvents\\(\\)#"
