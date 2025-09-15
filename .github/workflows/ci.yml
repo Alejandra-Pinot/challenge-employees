@@ -169,10 +169,11 @@ jobs:
       - name: Wait for web (8080)
         run: |
           for i in {1..40}; do
-            if curl -sf http://localhost:8080/ > /dev/null; then
-              echo "Web is up"; exit 0
+            code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/)
+            if [ "$code" -ge 200 ] && [ "$code" -lt 500 ]; then
+              echo "Web is up with HTTP $code"; exit 0
             fi
-            echo "Waiting web... ($i)"
+            echo "Waiting web... ($i) - got $code"
             sleep 3
           done
           docker compose logs web || true
